@@ -1,0 +1,70 @@
+/* src/styles/global.css */
+/* General Styles (Dark Theme Default) */
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: var(--primary-color); /* Default to dark primary background */
+  color: var(--text-color);             /* Default text color for dark theme */
+  transition: background-color 0.5s ease, color 0.5s ease; /* Smooth theme transitions - although now only dark theme */
+}
+
+/* ... (rest of your general styles like typography, etc. - if any) ... */
+
+
+/* DARK THEME (DEFAULT) -  RETAINED AND SIMPLIFIED */
+:root {
+  /* --- Core Background Colors --- */
+  --primary-color: #121212;          /* Main background color (dark gray) */
+  --secondary-color: #1e1e1e;        /* Section backgrounds, Navbar background (slightly lighter dark gray) */
+  --card-background: #282828;         /* Background for cards, experience items, contact form (even lighter dark gray) */
+  --card-background-light: #333;      /* A slightly lighter shade for card backgrounds if needed */
+
+  /* --- Text Colors --- */
+  --text-color: #f0f0f0;             /* Primary text color (light gray/off-white) */
+  --text-color-light: #ccc;          /* Slightly lighter text color for less emphasized text */
+
+  /* --- Accent Colors --- */
+  --accent-color: #00bcd4;          /* Main accent color (teal/cyan) */
+  --accent-hover-color: #00acc1;      /* Hover state accent color (slightly darker teal) */
+  --accent-color-transparent: rgba(0, 188, 212, 0.2); /* Transparent version of accent color */
+  --accent-color-rgb: 0, 188, 212;      /* RGB values of accent color for rgba() */
+
+  /* --- Border Colors --- */
+  --border-color: #444;              /* Border color (darker gray) */
+
+  /* --- Shadow Colors --- */
+  --card-shadow: 0 5px 12px rgba(0, 0, 0, 0.09);     /* Subtle card shadow */
+  --card-shadow-light: 0 3px 7px rgba(0, 0, 0, 0.05);   /* Lighter card shadow (no longer needed for light theme, but kept for consistency if used elsewhere) */
+  --card-shadow-lg: 0 7px 18px rgba(0, 0, 0, 0.14);      /* Larger card shadow on hover */
+  --card-shadow-lg-light: 0 4px 10px rgba(0, 0, 0, 0.12); /* Lighter larger card shadow (no longer needed for light theme, but kept if used) */
+
+  /* --- Spacing Scale --- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 32px;
+  --space-8: 40px;
+
+  /* --- Typography Scale --- */
+  --font-xs: 0.78rem;
+  --font-sm: 0.88rem;
+  --font-md: 1rem;
+  --font-lg: 1.2rem;
+  --font-xl: 1.6rem;
+  --font-xxl: 2.2rem;
+
+  /* --- Elevations --- */
+  --elev-1: 0 2px 6px rgba(0,0,0,0.12);
+  --elev-2: 0 4px 12px rgba(0,0,0,0.16);
+  --elev-3: 0 8px 20px rgba(0,0,0,0.20);
+}

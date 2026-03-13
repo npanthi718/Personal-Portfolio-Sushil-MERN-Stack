@@ -1,0 +1,89 @@
+/* src/components/EducationCard/EducationCard.module.css */
+
+.educationCard {
+    background-color: var(--card-background);
+    padding: 20px; /* Reduced padding from 25px to 20px for better mobile fit */
+    border-radius: 10px;
+    margin-bottom: 15px; /* Increased margin-bottom from 10px to 15px for better spacing */
+    box-shadow: var(--card-shadow);
+    border: 1px solid var(--border-color);
+    transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    width: 100%; /* Take full width in Education section */
+    max-width: 1100px; /* Limit width if needed */
+    text-align: left; /* Align text to left */
+    color: var(--text-color); /* Ensure text color is themed */
+    box-sizing: border-box; /* **NEW**: Ensure padding is included in width */
+    min-width: 0;       /* **NEW**: Allow card to shrink if needed */
+}
+
+.degree {
+    font-size: 1.3rem; /* Reduced font-size from 1.4rem for better mobile fit */
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 8px; /* Reduced margin-bottom from 10px for tighter spacing */
+    word-wrap: break-word; /* **NEW**: Handle long degree names */
+    display: flex;
+    align-items: center;
+}
+
+.institution {
+    font-size: 1.05rem; /* Reduced font-size from 1.1rem for better mobile fit */
+    color: var(--accent-color);
+    margin-bottom: 6px; /* Reduced margin-bottom from 8px for tighter spacing */
+    word-wrap: break-word; /* **NEW**: Handle long institution names */
+    display: flex;
+    align-items: center;
+}
+
+.date {
+    font-size: 0.95rem; /* Reduced font-size from 1rem for better mobile fit */
+    color: var(--text-color);
+    opacity: 0.7;
+    margin-bottom: 12px; /* Reduced margin-bottom from 15px for tighter spacing */
+    display: flex;
+    align-items: center;
+}
+
+.cgpa {
+    font-size: 0.95rem; /* Reduced font-size from 1rem for better mobile fit */
+    color: var(--text-color);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+}
+
+.icon {
+    margin-right: 10px;
+    color: var(--accent-color);
+    font-size: 1.1em; /* Adjust icon size relative to font */
+}
+
+
+/* ----------------------------------------------------- */
+/* Media Query for Smaller Screens (Mobile - up to 767px) */
+/* ----------------------------------------------------- */
+@media (max-width: 767px) {
+    .educationCard {
+        padding: 15px; /* Further reduced padding for very small screens */
+        margin-bottom: 12px; /* Further reduced margin-bottom for very small screens */
+    }
+
+    .degree {
+        font-size: 1.1rem; /* Further reduced font-size for very small screens */
+        margin-bottom: 6px; /* Further reduced margin-bottom for very small screens */
+    }
+
+    .institution {
+        font-size: 0.95rem; /* Further reduced font-size for very small screens */
+        margin-bottom: 5px; /* Further reduced margin-bottom for very small screens */
+    }
+
+    .date {
+        font-size: 0.9rem; /* Further reduced font-size for very small screens */
+        margin-bottom: 10px; /* Further reduced margin-bottom for very small screens */
+    }
+
+    .cgpa {
+        font-size: 0.9rem; /* Further reduced font-size for very small screens */
+    }
+}

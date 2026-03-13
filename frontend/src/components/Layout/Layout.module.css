@@ -1,0 +1,18 @@
+/* src/components/Layout/Layout.module.css */
+.layoutContainer {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    overflow-x: hidden;
+    background-color: var(--primary-color); /* Added: Ensure layout container background is themed */
+}
+
+.mainContent {
+    flex: 1;
+    padding: 20px;
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    box-sizing: border-box;
+    color: var(--text-color); /* Added: Ensure main content text color is themed */
+}

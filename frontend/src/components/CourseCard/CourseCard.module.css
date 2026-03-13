@@ -1,0 +1,77 @@
+/* src/components/CourseCard/CourseCard.module.css */
+
+.courseCard {
+    background-color: var(--card-background);
+    padding: 18px; /* Reduced padding from 20px for better mobile fit */
+    border-radius: 7px;
+    margin-bottom: 12px; /* Reduced margin-bottom from 15px for better spacing */
+    box-shadow: var(--card-shadow-light); /* Lighter shadow for Courses */
+    border: 1px solid var(--border-color);
+    transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    width: 100%; /* Take full width in Courses section */
+    max-width: 1100px; /* Slightly smaller max width */
+    text-align: left;
+    color: var(--text-color);
+    box-sizing: border-box; /* **NEW**: Ensure padding is included in width */
+    min-width: 0;       /* **NEW**: Allow card to shrink if needed */
+}
+
+.courseName {
+    font-size: 1.1rem; /* Reduced font-size from 1.2rem for better mobile fit */
+    font-weight: 500; /* Slightly less bold than CertificateName */
+    color: var(--text-color);
+    margin-bottom: 6px; /* Reduced margin-bottom from 8px for tighter spacing */
+    word-wrap: break-word; /* **NEW**: Handle long course names */
+    display: flex;
+    align-items: center;
+}
+
+.institution {
+    font-size: 0.85rem; /* Reduced font-size from 0.9rem for better mobile fit */
+    color: var(--accent-color);
+    margin-bottom: 5px; /* Reduced margin-bottom from 6px for tighter spacing */
+    font-style: italic;
+    opacity: 0.9; /* Slightly more opaque institution text */
+    word-wrap: break-word; /* **NEW**: Handle long institution names */
+    display: flex;
+    align-items: center;
+}
+
+.date {
+    font-size: 0.75rem; /* Reduced font-size from 0.8rem for better mobile fit */
+    color: var(--text-color);
+    opacity: 0.6; /* Slightly lighter date text */
+    display: flex;
+    align-items: center;
+}
+
+.icon {
+    margin-right: 10px;
+    color: var(--accent-color);
+    font-size: 1.1em; /* Adjust icon size relative to font */
+}
+
+
+/* ----------------------------------------------------- */
+/* Media Query for Smaller Screens (Mobile - up to 767px) */
+/* ----------------------------------------------------- */
+@media (max-width: 767px) {
+    .courseCard {
+        padding: 14px; /* Further reduced padding for very small screens */
+        margin-bottom: 10px; /* Further reduced margin-bottom for very small screens */
+    }
+
+    .courseName {
+        font-size: 1rem; /* Further reduced font-size for very small screens */
+        margin-bottom: 5px; /* Further reduced margin-bottom for very small screens */
+    }
+
+    .institution {
+        font-size: 0.8rem; /* Further reduced font-size for very small screens */
+        margin-bottom: 4px; /* Further reduced margin-bottom for very small screens */
+    }
+
+    .date {
+        font-size: 0.7rem; /* Further reduced font-size for very small screens */
+    }
+}

@@ -1,0 +1,94 @@
+.container { 
+    max-width: 1200px; 
+    margin: 24px auto; 
+    padding: 16px; 
+}
+
+.card { 
+    background: #1e1e1e; 
+    border: 1px solid #333; 
+    border-radius: 10px; 
+    padding: 24px; 
+    margin-bottom: 24px; 
+}
+
+.title { 
+    font-size: 1.6rem; 
+    margin-bottom: 16px; 
+    color: #00bcd4; 
+    font-weight: bold;
+}
+
+.grid { 
+    display: grid; 
+    grid-template-columns: 1fr; 
+    gap: 16px; 
+}
+
+@media (min-width: 768px) {
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.table { 
+    width: 100%; 
+    border-collapse: collapse; 
+    margin-top: 16px;
+}
+
+.table th, .table td { 
+    border-bottom: 1px solid #333; 
+    padding: 12px 8px; 
+    text-align: left; 
+    color: #ccc;
+}
+
+.table th {
+    color: #00bcd4;
+    font-weight: bold;
+}
+
+.actions button { 
+    margin-right: 8px; 
+}
+
+.login { 
+    max-width: 420px; 
+    margin: 80px auto; 
+    padding: 24px;
+    background: #1e1e1e;
+    border-radius: 12px;
+}
+
+.toolbar { 
+    display: flex; 
+    gap: 12px; 
+    margin-bottom: 16px; 
+    flex-wrap: wrap;
+}
+
+/* Custom scrollbar for admin panel */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #121212;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #444;
+}
