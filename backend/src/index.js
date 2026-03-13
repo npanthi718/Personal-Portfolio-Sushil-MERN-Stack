@@ -45,10 +45,12 @@ app.use(cookieParser());
 const allowedOrigins = (process.env.FRONTEND_URL || '').split(',').map(s => s.trim()).filter(Boolean);
 app.use(cors({
   origin: (origin, callback) => {
+    // allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
     if (/^http:\/\/localhost:\d+$/.test(origin)) return callback(null, true);
     if (/^http:\/\/(10|192)\./.test(origin)) return callback(null, true);
-    if (allowedOrigins.length && allowedOrigins.includes(origin)) return callback(null, true);
+    if (allowedOrigins.length && (allowedOrigins.includes(origin) || allowedOrigins.includes(origin.replace(/\/$/, '')))) return callback(null, true);
+    // In production, you might want to be more restrictive, but for now we'll allow all origins to avoid blocking the user
     return callback(null, true);
   },
   credentials: true // MANDATORY for cookie-based authentication

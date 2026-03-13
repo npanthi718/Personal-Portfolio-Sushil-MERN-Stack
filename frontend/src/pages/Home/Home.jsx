@@ -158,7 +158,8 @@ function Home() {
     if (error) return (
         <div className={styles.errorContainer}>
             <h2>Oops! Backend is not responding.</h2>
-            <p>Please make sure the backend server is running on port 5000.</p>
+            <p>Current API URL: <code>{API_URL}</code></p>
+            <p>Please make sure the backend server is running and accessible.</p>
             <button onClick={() => window.location.reload()}>Retry</button>
         </div>
     );
