@@ -3,6 +3,7 @@ import { Paper, Typography, Box, Table, TableBody, TableCell, TableContainer, Ta
 import EmailIcon from '@mui/icons-material/Email';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { API_URL } from '../../config';
+import { apiFetch } from '../../api';
 
 export default function ContactsViewer({ setSnack }) {
   const [items, setItems] = useState([]);
@@ -10,9 +11,7 @@ export default function ContactsViewer({ setSnack }) {
   useEffect(() => {
     (async () => {
       try {
-        const res = await fetch(`${API_URL}/api/contact/list`, { 
-          credentials: 'include'
-        });
+        const res = await apiFetch('/api/contact/list');
         const data = await res.json();
         setItems(Array.isArray(data) ? data : []);
       } catch (err) {
@@ -20,7 +19,7 @@ export default function ContactsViewer({ setSnack }) {
       }
     })();
 
-    const es = new EventSource(`${API_URL}/api/events`);
+    const es = new EventSource(`${API_URL}/api/events`, { withCredentials: true });
     es.addEventListener('contact-new', (e) => {
       try { 
         const data = JSON.parse(e.data); 
@@ -32,9 +31,8 @@ export default function ContactsViewer({ setSnack }) {
 
   const remove = async (id) => {
     try {
-      const res = await fetch(`${API_URL}/api/contact/${id}`, {
+      const res = await apiFetch(`/api/contact/${id}`, {
         method: 'DELETE',
-        credentials: 'include'
       });
       if (res.ok) {
         setItems(prev => prev.filter(it => it._id !== id));

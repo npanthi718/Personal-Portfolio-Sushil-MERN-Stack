@@ -189,7 +189,7 @@ export default function HomeEditor({ setSnack }) {
                                 </Box>
                                 {hero.photoLink && (
                                     <Box mt={2} sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                                        <img src={hero.photoLink} alt="Preview" crossOrigin="anonymous" style={{ width: 60, height: 60, borderRadius: '50%', objectFit: 'cover', border: '2px solid #333' }} />
+                                        <img src={hero.photoLink} alt="Preview" style={{ width: 60, height: 60, borderRadius: '50%', objectFit: 'cover', border: '2px solid #333' }} />
                                         <Typography variant="caption" sx={{ color: '#888', maxWidth: 150, overflow: 'hidden', textOverflow: 'ellipsis' }}>
                                             {hero.photoLink.split('/').pop()}
                                         </Typography>
@@ -260,7 +260,6 @@ export default function HomeEditor({ setSnack }) {
                             <motion.img
                                 src={(typeof hero.photoLink === 'string' && hero.photoLink) ? hero.photoLink : import.meta.env.VITE_CLOUDINARY_URL}
                                 alt="Profile"
-                                crossOrigin="anonymous"
                                 style={{ width: 150, height: 150, borderRadius: '50%', objectFit: 'cover', border: '4px solid #1e1e1e', marginBottom: '1.5rem', boxShadow: '0 0 20px rgba(0,188,212,0.3)' }}
                                 initial={{ opacity: 0, scale: 0.8 }}
                                 animate={{ opacity: 1, scale: 1 }}

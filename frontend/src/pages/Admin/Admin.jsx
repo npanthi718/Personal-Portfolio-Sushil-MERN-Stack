@@ -100,12 +100,13 @@ export default function Admin() {
         if (icon === 'about' || label.includes('about')) return <AboutEditor setSnack={setSnack} />;
         if (icon === 'skill' || label.includes('skill')) return <SkillsEditor setSnack={setSnack} />;
         if (icon === 'project' || label.includes('project')) return <ProjectsEditor setSnack={setSnack} />;
+        if (label.includes('add') || label.includes('additional')) return <AdditionalExperienceEditor setSnack={setSnack} />;
         if (icon === 'experience' || label.includes('experience')) return <ExperienceEditor setSnack={setSnack} />;
         if (icon === 'education' || label.includes('education')) return <EducationEditor setSnack={setSnack} />;
         if (icon === 'course' || label.includes('course')) return <CoursesEditor setSnack={setSnack} />;
         if (icon === 'achievement' || label.includes('achievement')) return <AchievementsEditor setSnack={setSnack} />;
         if (icon === 'paper' || label.includes('paper')) return <PapersEditor setSnack={setSnack} />;
-        if (label.includes('add') || label.includes('additional')) return <AdditionalExperienceEditor setSnack={setSnack} />;
+        if (icon === 'contact' || label.includes('contact')) return <ContactsViewer setSnack={setSnack} />;
         return null;
     };
 

@@ -11,6 +11,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import { API_URL } from '../../config';
+import { apiFetch } from '../../api';
 
 export default function AchievementsEditor({ setSnack }) {
     const [items, setItems] = useState([]);
@@ -23,18 +24,16 @@ export default function AchievementsEditor({ setSnack }) {
     }, []);
 
     async function loadItems() {
-        const res = await fetch(`${API_URL}/api/achievements`, { credentials: 'include' });
+        const res = await apiFetch('/api/achievements');
         const data = await res.json();
         setItems(Array.isArray(data) ? data : []);
     }
 
     async function saveAll(next) {
         try {
-            const res = await fetch(`${API_URL}/api/achievements`, {
+            const res = await apiFetch('/api/achievements', {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ data: next }),
-                credentials: 'include'
             });
             if (res.ok) {
                 setItems(next);
@@ -54,11 +53,9 @@ export default function AchievementsEditor({ setSnack }) {
             description: newItem.description.split('\n').map(d => d.trim()).filter(Boolean)
         };
         try {
-            const res = await fetch(`${API_URL}/api/achievements`, {
+            const res = await apiFetch('/api/achievements', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload),
-                credentials: 'include'
             });
             if (res.ok) {
                 setNewItem({ title: '', company: '', date: '', location: '', description: '' });
@@ -89,11 +86,9 @@ export default function AchievementsEditor({ setSnack }) {
             description: editForm.description.split('\n').map(d => d.trim()).filter(Boolean)
         };
         try {
-            const res = await fetch(`${API_URL}/api/achievements/${updated._id}`, {
+            const res = await apiFetch(`/api/achievements/${updated._id}`, {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(updated),
-                credentials: 'include'
             });
             if (res.ok) {
                 setEditingIdx(null);
@@ -108,9 +103,8 @@ export default function AchievementsEditor({ setSnack }) {
 
     const remove = async (id) => {
         try {
-            const res = await fetch(`${API_URL}/api/achievements/${id}`, {
+            const res = await apiFetch(`/api/achievements/${id}`, {
                 method: 'DELETE',
-                credentials: 'include'
             });
             if (res.ok) {
                 await loadItems();
@@ -129,11 +123,9 @@ export default function AchievementsEditor({ setSnack }) {
         setItems(next);
 
         try {
-            await fetch(`${API_URL}/api/achievements/reorder`, {
+            await apiFetch('/api/achievements/reorder', {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ ids: next.map(i => i._id) }),
-                credentials: 'include'
             });
         } catch (err) {
             setSnack({ open: true, message: 'Reorder failed', severity: 'error' });

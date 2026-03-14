@@ -12,6 +12,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import { API_URL } from '../../config';
+import { apiFetch } from '../../api';
 
 export default function ExperienceEditor({ setSnack }) {
   const [items, setItems] = useState([]);
@@ -22,7 +23,7 @@ export default function ExperienceEditor({ setSnack }) {
   useEffect(() => {
     (async () => {
       try {
-        const res = await fetch(`${API_URL}/api/experience`, { credentials: 'include' });
+        const res = await apiFetch('/api/experience');
         if (res.status === 401) return;
         const data = await res.json();
         setItems(Array.isArray(data) ? data : []);
@@ -34,7 +35,7 @@ export default function ExperienceEditor({ setSnack }) {
 
   async function loadItems() {
     try {
-      const res = await fetch(`${API_URL}/api/experience`, { credentials: 'include' });
+      const res = await apiFetch('/api/experience');
       if (res.status === 401) return;
       const data = await res.json();
       setItems(Array.isArray(data) ? data : []);
@@ -50,11 +51,9 @@ export default function ExperienceEditor({ setSnack }) {
       description: newItem.description.split('\n').map(d => d.trim()).filter(Boolean)
     };
     try {
-      const res = await fetch(`${API_URL}/api/experience`, {
+      const res = await apiFetch('/api/experience', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
-        credentials: 'include'
       });
       if (res.ok) {
         setNewItem({ title: '', company: '', date: '', location: '', description: '', order: 0 });
@@ -72,11 +71,9 @@ export default function ExperienceEditor({ setSnack }) {
       description: editForm.description.split('\n').map(d => d.trim()).filter(Boolean)
     };
     try {
-      const res = await fetch(`${API_URL}/api/experience/${updated._id}`, {
+      const res = await apiFetch(`/api/experience/${updated._id}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updated),
-        credentials: 'include'
       });
       if (res.ok) {
         setEditingIdx(null);
@@ -91,9 +88,8 @@ export default function ExperienceEditor({ setSnack }) {
 
   async function remove(id) {
     try {
-      const res = await fetch(`${API_URL}/api/experience/${id}`, {
+      const res = await apiFetch(`/api/experience/${id}`, {
         method: 'DELETE',
-        credentials: 'include'
       });
       if (res.ok) {
         await loadItems();
@@ -115,11 +111,9 @@ export default function ExperienceEditor({ setSnack }) {
     setItems(next);
 
     try {
-      await fetch(`${API_URL}/api/experience/reorder`, {
+      await apiFetch('/api/experience/reorder', {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ids: next.map(i => i._id) }),
-        credentials: 'include'
       });
     } catch (err) {
       setSnack({ open: true, message: 'Reorder failed', severity: 'error' });

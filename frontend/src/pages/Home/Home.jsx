@@ -188,7 +188,6 @@ function Home() {
                         src={hero.photoLink || FALLBACK_PHOTO}
                         alt="Sushil Panthi"
                         className={styles.profileImage}
-                        crossOrigin="anonymous"
                         initial={{ opacity: 0, x: -100 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.7, delay: 0.6, type: 'spring', stiffness: 80 }}
