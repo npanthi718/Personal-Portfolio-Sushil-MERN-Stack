@@ -15,6 +15,7 @@ import NavManager from './NavManager';
 import DynamicEditor from './DynamicEditor';
 import { useNavigate } from 'react-router-dom';
 import { API_URL } from '../../config';
+import { apiFetch } from '../../api';
 
 import { 
     Snackbar, Alert, Tabs, Tab, Box, Typography, 
@@ -44,7 +45,7 @@ export default function Admin() {
     useEffect(() => {
         const checkAuth = async () => {
             try {
-                const res = await fetch(`${API_URL}/api/admin/verify`, { credentials: 'include' });
+                const res = await apiFetch('/api/admin/verify');
                 if (res.status === 401) {
                     navigate('/login');
                 }
@@ -60,7 +61,7 @@ export default function Admin() {
 
     const loadNav = async () => {
         try {
-            const res = await fetch(`${API_URL}/api/nav`);
+            const res = await apiFetch('/api/nav');
             const data = await res.json();
             setNavItems(Array.isArray(data) ? data : []);
         } catch (err) {
@@ -70,7 +71,7 @@ export default function Admin() {
 
     const loadCustomSections = async () => {
         try {
-            const res = await fetch(`${API_URL}/api/custom-sections`);
+            const res = await apiFetch('/api/custom-sections');
             const data = await res.json();
             setCustomSections(Array.isArray(data) ? data : []);
         } catch (err) {
@@ -82,7 +83,8 @@ export default function Admin() {
 
     const handleLogout = async () => {
         try {
-            await fetch(`${API_URL}/api/admin/logout`, { method: 'POST', credentials: 'include' });
+            await apiFetch('/api/admin/logout', { method: 'POST' });
+            localStorage.removeItem('adminToken');
             navigate('/login');
         } catch (err) {
             console.error('Logout failed:', err);

@@ -7,6 +7,7 @@ import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import { FaEnvelope, FaPhone, FaLinkedin, FaGithub, FaLink, FaTwitter, FaInstagram, FaGlobe } from 'react-icons/fa';
 import { API_URL } from '../../config';
+import { apiFetch } from '../../api';
 
 const iconOptions = [
     { label: 'Email', value: 'email', icon: <FaEnvelope /> },
@@ -27,7 +28,7 @@ export default function AboutEditor({ setSnack }) {
     useEffect(() => {
         (async () => {
             try {
-                const res = await fetch(`${API_URL}/api/about/single`, { credentials: 'include' });
+                const res = await apiFetch('/api/about/single');
                 if (res.status === 401) {
                     console.warn('Unauthorized to load about data');
                     return;
@@ -45,11 +46,9 @@ export default function AboutEditor({ setSnack }) {
     async function save(next) {
         try {
             const { _id, createdAt, updatedAt, __v, ...dataToSave } = next;
-            const res = await fetch(`${API_URL}/api/about/single`, {
+            const res = await apiFetch('/api/about/single', {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(dataToSave),
-                credentials: 'include'
             });
             if (res.status === 401) {
                 setSnack({ open: true, message: 'Unauthorized. Please login again.', severity: 'error' });

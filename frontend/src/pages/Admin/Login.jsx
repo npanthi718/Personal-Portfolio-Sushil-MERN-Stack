@@ -32,6 +32,9 @@ export default function Login() {
             });
             const data = await res.json();
             if (res.ok) {
+                if (data.token) {
+                    localStorage.setItem('adminToken', data.token);
+                }
                 setSnack({ open: true, message: 'Logged in successfully!', severity: 'success' });
                 setTimeout(() => navigate('/admin'), 1000);
             } else {

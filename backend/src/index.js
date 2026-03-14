@@ -40,6 +40,8 @@ const { upload, cloudinary } = require('./cloudinary');
 
 const app = express();
 
+app.set('trust proxy', 1); // Trust the first proxy (Render/Vercel)
+
 app.use(express.json());
 app.use(cookieParser());
 const allowedOrigins = (process.env.FRONTEND_URL || '').split(',').map(s => s.trim()).filter(Boolean);
@@ -50,7 +52,7 @@ app.use(cors({
     if (/^http:\/\/localhost:\d+$/.test(origin)) return callback(null, true);
     if (/^http:\/\/(10|192)\./.test(origin)) return callback(null, true);
     if (allowedOrigins.length && (allowedOrigins.includes(origin) || allowedOrigins.includes(origin.replace(/\/$/, '')))) return callback(null, true);
-    // In production, you might want to be more restrictive, but for now we'll allow all origins to avoid blocking the user
+    // In production, we should be more restrictive, but for now we'll allow all origins to avoid blocking the user
     return callback(null, true);
   },
   credentials: true // MANDATORY for cookie-based authentication
@@ -123,15 +125,16 @@ app.post('/api/admin/login', async (req, res) => {
 
     const token = jwt.sign({ sub: admin._id, role: 'admin' }, process.env.JWT_SECRET, { expiresIn: '1d' });
 
+    const isProduction = process.env.NODE_ENV === 'production';
     res.cookie('token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax', 
+      secure: isProduction, // Must be true for sameSite: 'none'
+      sameSite: isProduction ? 'none' : 'lax', 
       maxAge: 24 * 60 * 60 * 1000 // 1 day
     });
 
     console.log(`[Login] Success: ${admin.username}`);
-    res.json({ user: { username: admin.username, email: admin.email } });
+    res.json({ user: { username: admin.username, email: admin.email }, token });
   } catch (e) {
     console.error('[Login] Unexpected error:', e);
     res.status(500).json({ error: 'Server error' });
@@ -143,7 +146,12 @@ app.get('/api/admin/verify', auth, (req, res) => {
 });
 
 app.post('/api/admin/logout', (req, res) => {
-  res.clearCookie('token');
+  const isProduction = process.env.NODE_ENV === 'production';
+  res.clearCookie('token', {
+    httpOnly: true,
+    secure: isProduction,
+    sameSite: isProduction ? 'none' : 'lax'
+  });
   res.status(200).json({ message: 'Logged out' });
 });
 

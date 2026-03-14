@@ -5,6 +5,7 @@ import {
     Grid, CircularProgress, Tooltip
 } from '@mui/material';
 import { API_URL } from '../../config';
+import { apiFetch } from '../../api';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import DeleteIcon from '@mui/icons-material/Delete';
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -24,7 +25,7 @@ export default function HomeEditor({ setSnack }) {
 
     const loadHero = async () => {
         try {
-            const res = await fetch(`${API_URL}/api/hero/single`, { credentials: 'include' });
+            const res = await apiFetch('/api/hero/single');
             if (res.status === 401) {
                 // If unauthorized, we might want to handle it, but for now just log
                 console.warn('Unauthorized to load hero data');
@@ -61,10 +62,9 @@ export default function HomeEditor({ setSnack }) {
         if (isResume) formData.append('resourceType', 'raw');
 
         try {
-            const res = await fetch(`${API_URL}/api/upload`, {
+            const res = await apiFetch('/api/upload', {
                 method: 'POST',
                 body: formData,
-                credentials: 'include'
             });
             if (res.status === 401) throw new Error('Unauthorized. Please login again.');
             const data = await res.json();
@@ -97,21 +97,18 @@ export default function HomeEditor({ setSnack }) {
                 setSnack({ open: true, message: 'Title is required', severity: 'warning' });
                 return;
             }
-            const res = await fetch(`${API_URL}/api/hero/single`, {
+            const res = await apiFetch('/api/hero/single', {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(next),
-                credentials: 'include'
             });
             if (res.status === 401) {
                 setSnack({ open: true, message: 'Unauthorized. Please login again.', severity: 'error' });
                 return;
             }
             if (res.ok) {
-                setSnack({ open: true, message: 'Home section saved successfully!', severity: 'success' });
+                setSnack({ open: true, message: 'Hero content saved!', severity: 'success' });
             } else {
-                const err = await res.json();
-                setSnack({ open: true, message: err.error || 'Failed to save', severity: 'error' });
+                setSnack({ open: true, message: 'Failed to save hero content', severity: 'error' });
             }
         } catch (err) {
             setSnack({ open: true, message: 'Server error', severity: 'error' });

@@ -1,10 +1,15 @@
 const jwt = require('jsonwebtoken');
 
 module.exports = function auth(req, res, next) {
-  const token = req.cookies.token;
+  let token = req.cookies.token;
+
+  // Fallback to Authorization header if cookie is missing
+  if (!token && req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
+    token = req.headers.authorization.split(' ')[1];
+  }
 
   if (!token) {
-    console.warn(`[Auth] No token cookie found for request: ${req.method} ${req.path}`);
+    console.warn(`[Auth] No token found for request: ${req.method} ${req.path}`);
     return res.status(401).json({ error: 'Unauthorized: No token provided' });
   }
 
