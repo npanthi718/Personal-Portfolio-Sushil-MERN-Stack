@@ -131,7 +131,12 @@ export default function Admin() {
                             textColor="primary"
                             indicatorColor="primary"
                         >
-                            {navItems.map((item, index) => (
+                            {navItems.filter(item => {
+                                // Filter out custom sections from the primary nav items list
+                                // assuming they are already in customSections
+                                const isCustom = customSections.some(cs => cs.name === item.href.replace('#', ''));
+                                return !isCustom;
+                            }).map((item, index) => (
                                 <Tab key={item._id} label={item.label} />
                             ))}
                             {customSections.map((section, index) => (
@@ -143,11 +148,11 @@ export default function Admin() {
                     </Box>
 
                     <Box sx={{ mt: 2 }}>
-                        {tab < navItems.length ? (
-                            renderEditor(navItems[tab])
-                        ) : tab < navItems.length + customSections.length ? (
-                            <DynamicEditor section={customSections[tab - navItems.length]} setSnack={setSnack} />
-                        ) : tab === navItems.length + customSections.length ? (
+                        {tab < navItems.filter(item => !customSections.some(cs => cs.name === item.href.replace('#', ''))).length ? (
+                            renderEditor(navItems.filter(item => !customSections.some(cs => cs.name === item.href.replace('#', '')))[tab])
+                        ) : tab < navItems.filter(item => !customSections.some(cs => cs.name === item.href.replace('#', ''))).length + customSections.length ? (
+                            <DynamicEditor section={customSections[tab - navItems.filter(item => !customSections.some(cs => cs.name === item.href.replace('#', ''))).length]} setSnack={setSnack} />
+                        ) : tab === navItems.filter(item => !customSections.some(cs => cs.name === item.href.replace('#', ''))).length + customSections.length ? (
                             <NavManager setSnack={setSnack} loadCustomSections={loadCustomSections} />
                         ) : (
                             <ContactsViewer setSnack={setSnack} />

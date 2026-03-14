@@ -10,6 +10,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import { API_URL } from '../../config';
+import { apiFetch } from '../../api';
 
 export default function DynamicEditor({ section, setSnack }) {
     const [items, setItems] = useState([]);
@@ -19,7 +20,7 @@ export default function DynamicEditor({ section, setSnack }) {
 
     const loadItems = async () => {
         try {
-            const res = await fetch(`${API_URL}/api/custom-items/${section._id}`);
+            const res = await apiFetch(`/api/custom-items/${section._id}`);
             const data = await res.json();
             setItems(Array.isArray(data) ? data : []);
         } catch (err) {
@@ -35,13 +36,11 @@ export default function DynamicEditor({ section, setSnack }) {
     }, [section._id]);
 
     const add = async (e) => {
-        e.preventDefault();
+        if (e) e.preventDefault();
         try {
-            const res = await fetch(`${API_URL}/api/custom-items`, {
+            const res = await apiFetch('/api/custom-items', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ sectionId: section._id, data: newItem }),
-                credentials: 'include'
             });
             if (res.ok) {
                 setNewItem({});
@@ -55,11 +54,9 @@ export default function DynamicEditor({ section, setSnack }) {
 
     const saveEdit = async () => {
         try {
-            const res = await fetch(`${API_URL}/api/custom-items/${editForm._id}`, {
+            const res = await apiFetch(`/api/custom-items/${editForm._id}`, {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(editForm),
-                credentials: 'include'
             });
             if (res.ok) {
                 setEditingIdx(null);
@@ -74,9 +71,8 @@ export default function DynamicEditor({ section, setSnack }) {
 
     const remove = async (id) => {
         try {
-            const res = await fetch(`${API_URL}/api/custom-items/${id}`, {
+            const res = await apiFetch(`/api/custom-items/${id}`, {
                 method: 'DELETE',
-                credentials: 'include'
             });
             if (res.ok) {
                 loadItems();
@@ -98,11 +94,9 @@ export default function DynamicEditor({ section, setSnack }) {
         setItems(next);
 
         try {
-            await fetch(`${API_URL}/api/custom-items/reorder/${section._id}`, {
+            await apiFetch(`/api/custom-items/reorder/${section._id}`, {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ ids: next.map(i => i._id) }),
-                credentials: 'include'
             });
         } catch (err) {
             setSnack({ open: true, message: 'Reorder failed', severity: 'error' });
@@ -116,7 +110,7 @@ export default function DynamicEditor({ section, setSnack }) {
                     <Typography variant="h5" gutterBottom color="primary">Manage {section.label}</Typography>
                     <Paper variant="outlined" sx={{ p: 3, mb: 4, backgroundColor: 'transparent', border: '1px solid #444' }}>
                         <Typography variant="subtitle2" sx={{ mb: 2 }}>Add New Item</Typography>
-                        <form onSubmit={addItem}>
+                        <form onSubmit={add}>
                             <Grid container spacing={2}>
                                 {section.fields.map(field => (
                                     <Grid size={{ xs: 12, md: field.type === 'multiline' ? 12 : 6 }} key={field.name}>
@@ -141,10 +135,10 @@ export default function DynamicEditor({ section, setSnack }) {
                 <Grid size={{ xs: 12, lg: 7 }}>
                     <Typography variant="h6" gutterBottom color="primary">Manage {section.label} Items</Typography>
                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                        {items.map(item => (
+                        {items.map((item, idx) => (
                             <Paper key={item._id} sx={{ p: 2, backgroundColor: '#1e1e1e', border: '1px solid #333' }}>
-                                {editingItem?._id === item._id ? (
-                                    <form onSubmit={updateItem}>
+                                {editingIdx === idx ? (
+                                    <Box>
                                         <Grid container spacing={2}>
                                             {section.fields.map(field => (
                                                 <Grid size={{ xs: 12, md: field.type === 'multiline' ? 12 : 6 }} key={field.name}>
@@ -165,7 +159,7 @@ export default function DynamicEditor({ section, setSnack }) {
                                             <Button variant="contained" color="success" startIcon={<SaveIcon />} onClick={saveEdit}>Save</Button>
                                             <Button variant="outlined" startIcon={<CancelIcon />} onClick={() => { setEditingIdx(null); setEditForm(null); }}>Cancel</Button>
                                         </Box>
-                                    </form>
+                                    </Box>
                                 ) : (
                                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                         <Box>
@@ -178,7 +172,7 @@ export default function DynamicEditor({ section, setSnack }) {
                                         <Box sx={{ display: 'flex', gap: 0.5 }}>
                                             <IconButton size="small" disabled={idx === 0} onClick={() => move(item._id, -1)}><ArrowUpwardIcon fontSize="small" /></IconButton>
                                             <IconButton size="small" disabled={idx === items.length - 1} onClick={() => move(item._id, 1)}><ArrowDownwardIcon fontSize="small" /></IconButton>
-                                            <IconButton size="small" onClick={() => { setEditingIdx(idx); setEditForm(item); }}><EditIcon fontSize="small" /></IconButton>
+                                            <IconButton size="small" color="primary" onClick={() => { setEditingIdx(idx); setEditForm(item); }}><EditIcon fontSize="small" /></IconButton>
                                             <IconButton size="small" color="error" onClick={() => remove(item._id)}><DeleteIcon fontSize="small" /></IconButton>
                                         </Box>
                                     </Box>

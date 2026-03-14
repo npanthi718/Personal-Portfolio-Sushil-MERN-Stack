@@ -31,6 +31,7 @@ import BuildRoundedIcon from '@mui/icons-material/BuildRounded';
 import AddCircleOutlineRoundedIcon from '@mui/icons-material/AddCircleOutlineRounded';
 
 import { API_URL } from '../../config';
+import { apiFetch } from '../../api';
 
 const NAV_ICONS = [
     { value: 'home', label: 'Home', icon: <HomeRoundedIcon fontSize="small" /> },
@@ -64,7 +65,7 @@ export default function NavManager({ setSnack, loadCustomSections }) {
 
     const loadItems = async () => {
         try {
-            const res = await fetch(`${API_URL}/api/nav`);
+            const res = await apiFetch('/api/nav');
             const data = await res.json();
             setItems(Array.isArray(data) ? data : []);
         } catch (err) {
@@ -74,7 +75,7 @@ export default function NavManager({ setSnack, loadCustomSections }) {
 
     const loadSections = async () => {
         try {
-            const res = await fetch(`${API_URL}/api/custom-sections`);
+            const res = await apiFetch('/api/custom-sections');
             const data = await res.json();
             setSections(Array.isArray(data) ? data : []);
         } catch (err) {
@@ -98,13 +99,11 @@ export default function NavManager({ setSnack, loadCustomSections }) {
     }, []);
 
     async function addItem(e) {
-        e.preventDefault();
+        if (e) e.preventDefault();
         try {
-            const res = await fetch(`${API_URL}/api/nav`, {
+            const res = await apiFetch('/api/nav', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(newItem),
-                credentials: 'include'
             });
             if (res.ok) {
                 setNewItem({ label: '', href: '#', icon: 'home', order: 0, visible: true });
@@ -119,14 +118,12 @@ export default function NavManager({ setSnack, loadCustomSections }) {
     }
 
     async function addSection(e) {
-        e.preventDefault();
+        if (e) e.preventDefault();
         const name = newSection.label.toLowerCase().replace(/\s+/g, '-');
         try {
-            const res = await fetch(`${API_URL}/api/custom-sections`, {
+            const res = await apiFetch('/api/custom-sections', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ ...newSection, name }),
-                credentials: 'include'
             });
             if (res.ok) {
                 setNewSection({ label: '', icon: 'code', fields: [{ name: 'title', label: 'Title', type: 'text' }] });
@@ -141,9 +138,8 @@ export default function NavManager({ setSnack, loadCustomSections }) {
 
     async function deleteSection(id) {
         try {
-            const res = await fetch(`${API_URL}/api/custom-sections/${id}`, {
+            const res = await apiFetch(`/api/custom-sections/${id}`, {
                 method: 'DELETE',
-                credentials: 'include'
             });
             if (res.ok) {
                 loadSections();
@@ -158,11 +154,9 @@ export default function NavManager({ setSnack, loadCustomSections }) {
     async function saveEdit() {
         if (!editingItem) return;
         try {
-            const res = await fetch(`${API_URL}/api/nav/${editingItem._id}`, {
+            const res = await apiFetch(`/api/nav/${editingItem._id}`, {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(editingItem),
-                credentials: 'include'
             });
             if (res.ok) {
                 setEditingItem(null);
@@ -176,9 +170,8 @@ export default function NavManager({ setSnack, loadCustomSections }) {
 
     async function deleteItem(id) {
         try {
-            const res = await fetch(`${API_URL}/api/nav/${id}`, {
+            const res = await apiFetch(`/api/nav/${id}`, {
                 method: 'DELETE',
-                credentials: 'include'
             });
             if (res.ok) {
                 loadItems();
@@ -202,11 +195,9 @@ export default function NavManager({ setSnack, loadCustomSections }) {
         setItems(next);
         
         try {
-            await fetch(`${API_URL}/api/nav/reorder`, {
+            await apiFetch('/api/nav/reorder', {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ ids: next.map(i => i._id) }),
-                credentials: 'include'
             });
         } catch (err) {
             setSnack({ open: true, message: 'Reorder failed', severity: 'error' });
@@ -334,6 +325,8 @@ export default function NavManager({ setSnack, loadCustomSections }) {
                                             <MenuItem value="multiline">Long Text (Multiline)</MenuItem>
                                             <MenuItem value="link">Link/URL</MenuItem>
                                             <MenuItem value="number">Number</MenuItem>
+                                            <MenuItem value="date">Date</MenuItem>
+                                            <MenuItem value="image">Image URL</MenuItem>
                                         </Select>
                                     </FormControl>
                                     <IconButton size="small" color="error" onClick={() => {
